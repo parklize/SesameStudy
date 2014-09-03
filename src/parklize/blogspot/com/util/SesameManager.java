@@ -35,6 +35,7 @@ public class SesameManager {
             File dataDir = new File(repoPath);
             String indexes = "spoc,posc,cosp";
             Repository repo = new SailRepository(new NativeStore(dataDir,indexes));
+            
             repo.initialize();
             con = repo.getConnection();
         } catch (RepositoryException ex) {
@@ -65,7 +66,7 @@ public class SesameManager {
     */
     public static void clearRepository(RepositoryConnection con){
         try {
-            Resource[] rArray = new Resource[10000];
+            Resource[] rArray = new Resource[10000000];
             RepositoryResult rr = con.getContextIDs();
             int i = 0;
             while(rr.hasNext()){
