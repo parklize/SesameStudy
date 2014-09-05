@@ -24,7 +24,7 @@ public class SesameAPI {
     public static void main(String[] args){
         
         ValueFactory factory = ValueFactoryImpl.getInstance();
-        /* create personal profile ontology in example http://parklize.blogspot.ie/2014/05/semantic-web-practice-sparql-in-protege.html */
+        // Practice#1 : Create personal profile ontology in example http://parklize.blogspot.ie/2014/05/semantic-web-practice-sparql-in-protege.html 
         URI pgy = factory.createURI("http://parklize.blogspot.com/guangyuan-piao"); // Subject
         URI name = factory.createURI("http://xmlns.com/foaf/0.1/name"); // Predict
         Literal pgyName = factory.createLiteral("Guangyuan Piao"); // Object
@@ -46,7 +46,8 @@ public class SesameAPI {
         model.add(pgy, FOAF.FIRST_NAME, fn);
         model.add(pgy, FOAF.LAST_NAME, ln);
         
-        for(Statement s : model){
+        // Practice#2 : Filter statement which type is foaf person
+        for(Statement s : model.filter(null, RDF.TYPE, FOAF.PERSON)){
             System.out.println(s);
         }
     }
