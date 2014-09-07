@@ -45,8 +45,8 @@ public class SesameLearning {
                     + "PREFIX ogp:<http://opengraphprotocol.org/schema/>\n"
                     + "PREFIX schema:<http://schema.org/>\n"
                     + "PREFIX fn:<http://www.w3.org/2005/xpath-functions/>\n";
-            RepositoryConnection con = SesameManager.repositoryConnect("C:\\Users\\GoFor2014\\Documents\\NetBeansProjects\\SesameStudy");
-//            SesameManager.insertNQDataToRepo(con, "C:\\Users\\GoFor2014\\Downloads\\socialdata.nq");
+            RepositoryConnection con = SesameManager.repositoryConnect("C:\\Users\\Luhus\\Documents\\Temp\\SesameStudy");
+            SesameManager.insertNQDataToRepo(con, "C:\\Users\\Luhus\\Documents\\Temp\\socialdata.nq");
 //            SesameManager.clearRepository(con);
             String queryString = "SELECT (COUNT(*) AS ?count) WHERE {?x ?p ?y}";
 //            queryString = prefix+"SELECT (COUNT(*) AS ?count) WHERE {"

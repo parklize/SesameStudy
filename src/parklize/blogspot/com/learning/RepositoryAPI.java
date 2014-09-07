@@ -14,8 +14,11 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.rio.ParserConfig;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.openrdf.rio.RDFParser.DatatypeHandling;
+import org.openrdf.rio.helpers.BasicParserSettings;
 import org.openrdf.sail.nativerdf.NativeStore;
 
 /**
@@ -35,6 +38,14 @@ public class RepositoryAPI {
             String fn = "C:\\\\Users\\\\GoFor2014\\\\Downloads\\\\socialdata.nq";// use n-quads file in my case
             File file = new File(fn);
             con = nrp.getConnection();
+            
+            // before add file, you could set the config manually (for example, reserve bnodeid.. sesmae by default create own bnodeid while loading data
+            boolean verifyData = true;
+            boolean stopAtFirstError = true;
+            boolean preserveBnodeIds = true;
+            ParserConfig config = new ParserConfig();
+            config.set(BasicParserSettings.PRESERVE_BNODE_IDS, true);
+            con.setParserConfig(config);
             con.add(file, "file://"+file,RDFFormat.NQUADS);// add n-quads to connected repository, parameter1: datafile, parameter2: baseURI, parameter3: triple file type
         } catch (RepositoryException ex) {
             Logger.getLogger(RepositoryAPI.class.getName()).log(Level.SEVERE, null, ex);
