@@ -31,13 +31,14 @@ import parklize.blogspot.com.util.SesameManager;
  *
  * @author GoFor2014
  */
-public class SesameLearning {
+public class SesameInteractor {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try {
+            //// Prefix definition 
             String prefix = "PREFIX sioc:<http://rdfs.org/sioc/ns#>\n"
                     + "PREFIX dc:<http://purl.org/dc/terms/>\n"
                     + "PREFIX foaf:<http://xmlns.com/foaf/0.1/>\n"
@@ -45,9 +46,12 @@ public class SesameLearning {
                     + "PREFIX ogp:<http://opengraphprotocol.org/schema/>\n"
                     + "PREFIX schema:<http://schema.org/>\n"
                     + "PREFIX fn:<http://www.w3.org/2005/xpath-functions/>\n";
-            RepositoryConnection con = SesameManager.repositoryConnect("C:\\Users\\Luhus\\Documents\\Temp\\SesameStudy");
-            SesameManager.insertNQDataToRepo(con, "C:\\Users\\Luhus\\Documents\\Temp\\socialdata.nq");
+            //// Repository connection
+            RepositoryConnection con = SesameManager.repositoryConnect("C:\\Users\\GoFor2014\\Documents\\NetBeansProjects\\SesameStudy");
+//            SesameManager.insertNQDataToRepo(con, "C:\\Users\\GoFor2014\\Downloads\\socialdata.nq");
 //            SesameManager.clearRepository(con);
+            //// Query String
+            // Query for check no. of quads
             String queryString = "SELECT (COUNT(*) AS ?count) WHERE {?x ?p ?y}";
 //            queryString = prefix+"SELECT (COUNT(*) AS ?count) WHERE {"
 //                    + "{?s dc:created ?t .} UNION "
@@ -74,8 +78,12 @@ public class SesameLearning {
 //                    + "{?s rdf:type sioc:BlogPost .} "
 //                    + "FILTER (year(?t) = 2012 && CONTAINS(?c,\"gangnam\"))"
 //                    + "}";
-            queryString = prefix + "SELECT (COUNT(DISTINCT ?s) AS ?count) WHERE { "
-                    + "?s rdf:type ?type . "
+            queryString = prefix + "SELECT DISTINCT ?s ?time WHERE { "
+                    + "{?s rdf:type ?type .} UNION "
+                    + "{?s og:type \"article\" .} UNION "
+                    + "{?s og:type \"blog\" .} UNION "
+                    + "{?s ogp:type \"article\" .} UNION "
+                    + "{?s ogp:type \"blog\" .} "
                     + "?s ?p1 ?content . "
                     + "?s ?p2 ?time . "
                     + "VALUES ?type {sioc:BlogPost sioc:Item sioc:Post foaf:Document} "
@@ -83,30 +91,26 @@ public class SesameLearning {
                     + "schema:blogPosts schema:blogPost schema:articleSection schema:keywords "
                     + "schema:description <http://purl.org/dc/elements/1.1/title> <http://purl.org/rss/1.0/modules/content/encoded>} "
                     + "VALUES ?p2 {dc:created dc:date dc:issued schema:datePublished schema:startDate} "
-                    + "FILTER (year(?time) = 2012)"
-                    + "}";
+                    + "FILTER (year(?time) = 2012 && CONTAINS(LCASE(?content),\"gangnam style\")) "
+                    + "} "
+                    + "ORDER BY ?time";
             try {
                 TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
                 TupleQueryResult result = tupleQuery.evaluate();
                 while(result.hasNext()){
                     BindingSet bindingSet = result.next();
-                    System.out.println(bindingSet.getValue("count"));
-//                    String content = bindingSet.getValue("c").toString().toLowerCase();
-//                    if(content.contains("gangnam") || content.contains(" psy ")){
-//                        System.out.println(bindingSet.getValue("s"));
-//                        System.out.print(bindingSet.getValue("time")+"-----");
-//                        System.out.println(bindingSet.getValue("content"));
-//                    }
+                    System.out.print(bindingSet.getValue("time")+"---");
+                    System.out.println(bindingSet.getValue("s"));
                 }
             } catch (MalformedQueryException ex) {
-                Logger.getLogger(SesameLearning.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SesameInteractor.class.getName()).log(Level.SEVERE, null, ex);
                 
             } catch (QueryEvaluationException ex) {
-                Logger.getLogger(SesameLearning.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SesameInteractor.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         } catch (RepositoryException ex) {
-            Logger.getLogger(SesameLearning.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SesameInteractor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

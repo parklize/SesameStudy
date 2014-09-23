@@ -50,7 +50,7 @@ public class ChunkCommitter implements RDFHandler {
     public void handleStatement(Statement stmnt) throws RDFHandlerException {
         inserter.handleStatement(stmnt);
         count++;
-        if(count%chunkSize == 0){
+        if(count % chunkSize == 0){
             try {
                 con.commit();
             } catch (RepositoryException ex) {
